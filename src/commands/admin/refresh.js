@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const exec = require('child_process').exec;
-const HasPerms = require('../utils/permissions.js');
+const HasPerms = require('../../utils/permissions.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
