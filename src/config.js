@@ -6,8 +6,9 @@ exports.Config = {
     "GUILD_ID": "797613999309979668",
     "CLIENT_ID": "777055108013752320",
     "STATUS": "dnd",
-    "DESCRIPTION": "Keeping order...",
-    "COLOR": '#FE2C54'
+    "DESCRIPTION": "for bad memes...",
+    "COLOR": '#FE2C54',
+    "ACTIVITY": 3
 }
 
 /**

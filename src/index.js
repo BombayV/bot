@@ -29,11 +29,11 @@ for (const cmd of commands) {
 // }
 
 client.on('ready', _ => {
-  const presence = client.user.setPresence({ activities: [{ name: Config.DESCRIPTION }], status: Config.STATUS });
+  const presence = client.user.setPresence({ activities: [{ name: Config.DESCRIPTION, type: Config.ACTIVITY }], status: Config.STATUS });
   if (!presence) return;
 	if (!Statuses) return;
 	console.log(
-		`Bot Name: ${client.user.username}\nPresence: ${presence.activities}\nStatus: ${Statuses[presence.status]}\nCommand Files: ${commands.length}`
+		`Bot Name: ${client.user.username}\nPresence: ${presence.activities[0].name}\nStatus: ${Statuses[presence.status]}\nCommand Files: ${commands.length}\nActivity: ${[presence.activities[0].type]}`
 	)
 });
 
