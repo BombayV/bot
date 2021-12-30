@@ -13,6 +13,6 @@ module.exports = {
 	async execute(interaction) {
         const { _, options } = interaction;
         const question = options.getString('question');
-		await interaction.reply(`**Q:** *${question}*\n**A:** *${BallResponse[Math.floor(Math.random() * BallResponse.length)]}*`);
+		await interaction.reply(`> **${interaction.user.username}:** *${question}*\n**A:** *${BallResponse[Math.floor(Math.random() * BallResponse.length)]}*`);
 	},
 };

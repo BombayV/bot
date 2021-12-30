@@ -15,7 +15,6 @@ module.exports = {
 		.setName('joke')
 		.setDescription('Replies with a random joke.'),
 	async execute(interaction) {
-
         const resp = await fetch('https://icanhazdadjoke.com/', options);
         if (resp.ok) {
             const jsonJoke = await resp.json()
