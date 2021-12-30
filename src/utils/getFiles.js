@@ -1,5 +1,11 @@
 const fs = require('fs');
 
+/**
+ *
+ * @param { String } dir - Path of commands directory
+ * @param { String } suffix - Example: .js/.ts
+ * @returns { Array } - Array with all the command data
+ */
 const GetFiles = (dir, suffix) => {
     const fileSuffix = suffix || '.js'
     const files = fs.readdirSync(dir, {
