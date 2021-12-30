@@ -12,7 +12,7 @@ module.exports = {
         ),
 	async execute(interaction) {
         const { _, options } = interaction;
-        const question = options.getString('question');
+        const question = options.getString('question', true);
 		await interaction.reply(`> **${interaction.user.username}:** *${question}*\n**A:** *${BallResponse[Math.floor(Math.random() * BallResponse.length)]}*`);
 	},
 };

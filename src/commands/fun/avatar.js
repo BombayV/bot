@@ -1,4 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed } = require('discord.js');
+const Color = require('../../config.js').Config.COLOR;
 
 const Size = {
     ['xs']: 128,
@@ -31,10 +33,20 @@ module.exports = {
         const { _, options } = interaction;
         const imageSize = options.getString('size') || 's';
         const user = options.getUser('member') || interaction.user;
-		await interaction.reply(`**Size: ${imageSize}**\n` + user.displayAvatarURL({
-            format: 'png',
-            dynamic: true,
-            size: Size[imageSize],
-        }));
+
+        const exampleEmbed = new MessageEmbed()
+            .setColor(Color)
+            .setTitle(user.username)
+            .setDescription(`**Size: ${imageSize}**`)
+            .setImage(
+                user.displayAvatarURL({
+                    format: 'png',
+                    dynamic: true,
+                    size: Size[imageSize],
+                })
+            )
+            .setTimestamp()
+
+		await interaction.reply({embeds : [exampleEmbed]});
 	},
 };
