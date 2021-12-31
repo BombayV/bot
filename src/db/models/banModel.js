@@ -1,6 +1,10 @@
 const { Schema, models, model } = require('mongoose');
 
 const schema = new Schema({
+    guildId: {
+        type: String,
+        required: true
+    },
     userId: {
         type: String,
         required: true
@@ -11,6 +15,10 @@ const schema = new Schema({
     },
     reason: {
         type: String,
+        required: true
+    },
+    perma: {
+        type: Boolean,
         required: true
     },
     expires: {
