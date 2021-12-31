@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const getNumber = require('../../utils/minMax.js');
+const getNumber = require('../../utils/minMax');
 
 module.exports = {
 	data: new SlashCommandBuilder()

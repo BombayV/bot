@@ -1,5 +1,5 @@
-const Config = require('../config.js').Config;
-const GetFiles = require('../utils/getFiles.js');
+const Config = require('../config').Config;
+const GetFiles = require('../utils/getFiles');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 
@@ -23,6 +23,6 @@ for (const cmd of commandsData) {
       );
       console.log(`[SUCCESS]: Loaded ${commands.length} commands!`);
     } catch (err) {
-      console.log(`[ERROR]: Could not load commands! Check below for more info\n` + err);
+      console.log(`[ERROR]: Could not load commands! Check below for more info.\n` + err);
     }
 })();

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const Color = require('../../config.js').Config.COLOR;
+const Color = require('../../config').Config.COLOR;
 
 const Size = {
     ['xs']: 128,

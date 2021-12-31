@@ -1,10 +1,11 @@
 const Config = require('./config.js').Config;
 const Statuses = require('./config.js').Statuses;
 const GetFiles = require('./utils/getFiles.js');
+const { CreateConnection } = require('./db/connection');
 
 const { Client, Intents, Collection } = require('discord.js');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_BANS, Intents.FLAGS.GUILD_MEMBERS] });
 client.commands = new Collection();
 
 const commands = GetFiles('./src/commands/', '.js');
@@ -14,21 +15,8 @@ for (const cmd of commands) {
     }
 }
 
-// const commandFiles = fs.readdirSync('./src/commands', {
-//     withFileTypes: true
-// });
-// for (const file of commandFiles) {
-//     if (file.isDirectory()) {
-
-//     } else if (file.name.endsWith('.js')) {
-//         const cmd = require(`./commands/${file.name}`);
-//         if (cmd.data) {
-//             client.commands.set(cmd.data.name, cmd);
-//         }
-//     }
-// }
-
 client.on('ready', _ => {
+  CreateConnection()
   const presence = client.user.setPresence({ activities: [{ name: Config.DESCRIPTION, type: Config.ACTIVITY }], status: Config.STATUS });
   if (!presence) return;
 	if (!Statuses) return;

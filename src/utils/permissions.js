@@ -1,4 +1,4 @@
-const Roles = require('../config.js').WhitelistRoles;
+const Roles = require('../config').WhitelistRoles;
 
 /**
  *

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const BallResponse = require('../../config.js').Responses;
+const BallResponse = require('../../config').Responses;
 
 module.exports = {
 	data: new SlashCommandBuilder()
