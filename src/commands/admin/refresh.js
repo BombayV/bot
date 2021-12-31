@@ -9,16 +9,18 @@ module.exports = {
 	async execute(interaction) {
         if (HasPerms(interaction.member._roles)) {
             await interaction.deferReply({ ephemeral: true });
-            await new Promise(res => setTimeout(res, 3000, true));
-            await interaction.editReply({ content: `Commands have been refreshed!` });
-
-            exec('node src/utils/slashCommands.js', (err, inpResp, inpErr) => {
+            const load = await exec('node src/utils/slashCommands.js', (err, inpResp, inpErr) => {
                 console.log('[INFO/COMMAND]: ' + inpResp);
                 console.log('[ERROR/COMMAND]: ' + (inpErr || 'None'));
                 if (err !== null) {
                     console.log('[ERROR/COMMAND]: ' + err);
                 }
             });
+            if (!load.killed) {
+                await interaction.editReply({ content: `Commands have been refreshed!` });
+            } else {
+                await interaction.editReply({ content: `Execution was killed!` });
+            }
         } else {
             await interaction.reply({ content: 'You do not have permissions for this command!', ephemeral: true });
         }
