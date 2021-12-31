@@ -17,11 +17,13 @@ module.exports = {
             option.setName('size')
                 .setDescription('Size of the user avatar.')
                 .setRequired(false)
-                .addChoice('Extra Small', 'xs')
-                .addChoice('Small', 's')
-                .addChoice('Medium', 'm')
-                .addChoice('Large', 'l')
-                .addChoice('Extra Large', 'xl')
+                .addChoices([
+                    ['Extra Small', 'xs'],
+                    ['Small', 's'],
+                    ['Medium', 'm'],
+                    ['Large', 'l'],
+                    ['Extra Large', 'xl']
+                ])
         )
         .addUserOption(option =>
             option.setName('member')
