@@ -1,7 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const HasPerms = require('../../utils/permissions');
+const { MessageEmbed } = require('discord.js');
 const { NewBan, GetBanned } = require('../../db/actions/banAction');
 const { COLOR } = require('../../config').Config;
+const HasPerms = require('../../utils/permissions');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -29,78 +30,54 @@ module.exports = {
         ),
 	async execute(interaction) {
         if (HasPerms(interaction.member._roles)) {
+
+            // Defer reply so that there's time to ban user.
             await interaction.deferReply();
+
+            // Check if user was mentioned
             const { _, options } = interaction;
-            const user = options.getMember('member');
-            if (!user) return await interaction.editReply({ content: `No user input!` })
-            if (!user.id) return await interaction.editReply({ content: `Could not find user in guild!` });
-            const banStatus = await GetBanned(user.id);
+            const member = options.getMember('member');
+            if (!member) return await interaction.editReply({ content: `No user input!` })
+            if (!member.id) return await interaction.editReply({ content: `Could not find user in guild!` });
+
+            // Check if user is banned
+            const banStatus = await GetBanned(member.id);
             if (banStatus) return await interaction.editReply({ content: `User is already banned.` });
-            if (user.bannable) {
+
+            // Check if user is bannable
+            if (member.bannable) {
+
+                // Data needed for logs and db
                 const adminId = interaction.user.id;
                 const reason = options.getString('reason') || 'No reason specified.';
                 const deleteDays = options.getNumber('days') || 0;
-                const timeStr = options.getString('duration');
+
+                const timeStr = options.getString('duration')
                 const time = (timeStr && timeStr.match(/\d+|\D+/g)) || 'perma';
-                let duration = parseInt(Math.ceil(time[0]));
-                const banEmbed = {
-                    color: COLOR,
-                    title: 'User Banned',
-                    thumbnail: {
-                        url: user.user.displayAvatarURL({
+                let duration = parseInt(Math.ceil(time[0])) || 0;
+                const type = (time[1] && time[1].toLowerCase());
+
+                const banEmbed = new MessageEmbed()
+                    .setColor(COLOR)
+                    .setTitle('User Banned')
+                    .setThumbnail(
+                        member.user.displayAvatarURL({
                             format: 'png',
                             dynamic: true,
                             size: 96
-                        }),
-                    },
-                    fields: [
-                        {
-                            name: 'Username',
-                            value: `<@${user.id}>`,
-                            inline: true
-                        },
-                        {
-                            name: 'User Id',
-                            value: user.id,
-                            inline: true
-                        },
-                        {
-                            name: 'Staff Name',
-                            value: `<@${adminId}>`,
-                            inline: false
-                        },
-                        {
-                            name: 'Reason',
-                            value: reason,
-                            inline: false
-                        },
-                        {
-                            name: 'Duration',
-                            value: timeStr || 'Perma'
-                        },
-                        {
-                            name: 'Unban Date',
-                            value: duration
-                        }
-                    ],
-                    timestamp: new Date(),
-                };
-                if (time[0] === 'perma' || time == 'perma') {
-                    // const wasBanned = await user.ban({ reason: reason, days: deleteDays});
-                    // if (wasBanned) {
-                    //     const banned = await NewBan(interaction.guild.id, user.id, adminId, reason, true, new Date()).catch((err) => console.log);
-                    //     if (banned) {
-                    //         return await interaction.editReply({ embed: [banEmbed] })
-                    //     } else {
-                    //         return await interaction.editReply({ content: `<@${user.id}> user was already banned.` })
-                    //     }
-                    // } else {
-                    //     return await interaction.editReply({ content: `<@${user.id}> could not be banned.` })
-                    // }
-                    banEmbed.fields[5].value = 'Permabanned';
-                    return await interaction.editReply({ embeds: [banEmbed] })
-                }
-                const type = (time[1] && time[1].toLowerCase());
+                        })
+                    )
+                    .addFields(
+                        { name: 'Username', value: `<@${member.id}>`, inline: true },
+                        { name: 'User Id', value: member.id, inline: true },
+                        { name: 'Staff Name', value: `<@${adminId}>`, inline: false },
+                        { name: 'Reason', value: reason, inline: false },
+                        { name: 'Duration', value: timeStr || 'Perma' },
+                        { name: 'Unban Date', value: 'Permabanned'  }
+                    )
+                    .setTimestamp();
+
+                // Duration type
                 if (!type) return await interaction.editReply({ content: `**Did not specify duration format ("m", "h", "d") or duration.**` });
                 switch (type) {
                     case 'm':
@@ -114,28 +91,39 @@ module.exports = {
                         break;
 
                     default:
-                        return await interaction.editReply({ content: `**Wrong duration format, use duration (number) and "m", "h", "d".**` });
+                        if (time !== 'perma') {
+                            return await interaction.editReply({ content: `**Wrong duration format, use duration (number) and "m", "h", "d".**` });
+                        }
                 };
 
+                // Set expiration date and perma
                 const expires = new Date();
                 expires.setMinutes(expires.getMinutes() + duration);
                 banEmbed.fields[5].value = expires.toLocaleDateString('en-us');
+                let perma = false;
 
-                return await interaction.editReply({ embeds: [banEmbed] })
+                // Check if person is getting permabanned
+                if (time[0] === 'perma' || time == 'perma') {
+                    perma = true;
+                    banEmbed.fields[5].value = 'Permabanned';
+                }
 
-                // const wasBanned = await user.ban({ reason: reason, days: deleteDays});
-                // if (wasBanned) {
-                //     const banned = await NewBan(interaction.guild.id, user.id, adminId, reason, false, expires).catch((err) => console.log);
-                //     if (banned) {
-                //         return await interaction.editReply({ content: `<@${user.id}> has been banned for ${timeStr}. Hopefully he had a nice visit.` })
-                //     } else {
-                //         return await interaction.editReply({ content: `<@${user.id}> user was already banned.` })
-                //     }
-                // } else {
-                //     return await interaction.editReply({ content: `<@${user.id}> could not be banned.` })
-                // }
+                try {
+                    // Ban member with delete days
+                    member.ban({ reason: reason, days: deleteDays});
+
+                    // Add user to ban db
+                    const banned = await NewBan(interaction.guild.id, member.id, adminId, reason, perma, expires).catch((err) => console.log);
+                    if (banned) {
+                        return await interaction.editReply({ embeds: [banEmbed] })
+                    } else {
+                        return await interaction.editReply({ content: `<@${member.id}> user was already banned.` })
+                    }
+                } catch (err) {
+                    return await interaction.editReply({ content: `<@${member.id}> could not be banned.` })
+                }
             } else {
-                return await interaction.editReply({ content: `<@${user.id}> is not bannable.` })
+                return await interaction.editReply({ content: `<@${member.id}> is not bannable.` })
             }
         } else {
             return await interaction.reply({ content: 'You do not have permissions for this command!'});
