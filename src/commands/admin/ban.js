@@ -30,7 +30,7 @@ module.exports = {
         ),
 	async execute(interaction) {
         // Check for perms
-        if (!HasPerms(interaction.member._roles)) return await interaction.reply({ content: 'You do not have permissions for this command!'});
+        if (!HasPerms(interaction.member._roles)) return await interaction.reply({ content: 'You do not have permissions for this command!', ephemeral: true });
 
         // Defer reply so that there's time to ban user.
         await interaction.deferReply();
@@ -39,7 +39,7 @@ module.exports = {
         const { _, options } = interaction;
         const member = options.getMember('member');
         if (!member) return await interaction.editReply({ content: `No user input!` })
-        if (!member.id) return await interaction.editReply({ content: `Could not find user in guild!` });
+        if (!member?.id) return await interaction.editReply({ content: `Could not find user in guild!` });
 
         // Check if user is banned
         const banStatus = await GetBanned(member.id);
@@ -79,6 +79,7 @@ module.exports = {
             .setTimestamp();
 
         // Duration type
+        if (duration < 1) return await interaction.editReply({ content: `**Duration cannot be less than zero.**` });
         if (!type) return await interaction.editReply({ content: `**Did not specify duration format ("m", "h", "d") or duration.**` });
         switch (type) {
             case 'm':
