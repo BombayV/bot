@@ -12,7 +12,7 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
 
         // Execute js file
-        const load = await exec('node src/utils/slashCommands.js', (err, inpResp, inpErr) => {
+        const load = await exec('node src/utils/refreshCmd.js', (err, inpResp, inpErr) => {
             console.log('[INFO/COMMAND]: ' + inpResp);
             console.log('[ERROR/COMMAND]: ' + (inpErr || 'None'));
             if (err !== null) {
