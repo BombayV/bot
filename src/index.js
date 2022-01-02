@@ -1,6 +1,7 @@
 const Config = require('./config.js').Config;
 const Statuses = require('./config.js').Statuses;
 const GetFiles = require('./utils/getFiles.js');
+const Cron = require('./utils/cron');
 const { CreateConnection } = require('./db/connection');
 
 const { Client, Intents, Collection } = require('discord.js');
@@ -16,7 +17,8 @@ for (const cmd of commands) {
 }
 
 client.on('ready', _ => {
-  CreateConnection()
+  Cron(client);
+  CreateConnection();
   const presence = client.user.setPresence({ activities: [{ name: Config.DESCRIPTION, type: Config.ACTIVITY }], status: Config.STATUS });
   if (!presence) return;
 	if (!Statuses) return;

@@ -6,7 +6,7 @@ const Ban = require('../models/banModel');
  * @returns { Object } - Is user banned
  */
 exports.GetBanned = async userId => {
-    const result = await Ban.findOne({userId}).catch((err) => console.log);
+    const result = await Ban.findOne({userId}).catch((err) => console.log(err));
     return result;
 }
 

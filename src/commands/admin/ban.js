@@ -114,7 +114,7 @@ module.exports = {
             member.ban({ reason: reason, days: deleteDays});
 
             // Add user to ban db
-            const banned = await NewBan(interaction.guild.id, member.id, adminId, reason, perma, expires).catch((err) => console.log);
+            const banned = await NewBan(interaction.guild.id, member.id, adminId, reason, perma, expires).catch((err) => console.log(err));
             if (banned) {
                 return await interaction.editReply({ embeds: [banEmbed] })
             } else {
