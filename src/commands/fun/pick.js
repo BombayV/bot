@@ -57,11 +57,14 @@ module.exports = {
 	async execute(interaction) {
         const { _, options } = interaction;
         const answers = []
+
+        // Push picks from the user to an array
         for (const choice of options._hoistedOptions) {
             if (choice && choice.value) {
                 answers.push(choice.value);
             }
         }
+        // Selects from an array
         const message = `> **${interaction.user.username}:** ${answers.join(', ')}\n**A: **${answers[Math.floor(Math.random() * answers.length)]}`
         await interaction.reply(message)
     },

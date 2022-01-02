@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Color = require('../../config').Config.COLOR;
 
+// All possible sizes
 const Size = {
     ['xs']: 128,
     ['s']: 256,
@@ -31,10 +32,12 @@ module.exports = {
                 .setRequired(false)
         ),
 	async execute(interaction) {
+        // Options
         const { _, options } = interaction;
         const imageSize = options.getString('size') || 's';
         const user = options.getUser('member') || interaction.user;
 
+        // Embed of the avatar
         const avatar = {
             color: Color,
             title: user.username,

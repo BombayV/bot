@@ -8,7 +8,7 @@ manager.on('connected', function() {
 });
 
 manager.on('disconnected', function(){
-    console.log(`Database connected!\nState: ${this.readyState}\nTable Name: ${this.name}`);
+    console.log(`Database disconnected!\nState: ${this.readyState}\nTable Name: ${this.name}`);
 })
 
 /**

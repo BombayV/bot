@@ -1,9 +1,11 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Octokit, App } = require('octokit');
+const { MessageEmbed } = require('discord.js');
+const { Octokit } = require('octokit');
 
-const { GITHUB_AUTH, COLOR } = require('../../config.js').Config;
-const Capitilize = require('../../utils/capString.js')
+const { GITHUB_AUTH, COLOR } = require('../../config').Config;
+const { Capitilize } = require('../../utils/variedUtils');
 
+// Register authentication
 const octokit = new Octokit({
     auth: GITHUB_AUTH
 });
@@ -23,6 +25,7 @@ module.exports = {
                 .setRequired(true)
         ),
 	async execute(interaction) {
+        // Check for auth with github
         const userAuth = await octokit.rest.users.getAuthenticated()
         .catch((err) => {
             console.log(`[ERROR/GITHBU]: Could not authenticate. Read below.\n` + err);
@@ -47,50 +50,25 @@ module.exports = {
             return;
         })
 
-        if (repo && repo.status == 200) {
-            console.log(repo);
-            const exampleEmbed = {
-                color: COLOR,
-                title: repo.data.full_name,
-                url: repoLink,
-                description: repo.data.description,
-                thumbnail: {
-                    url: repo.data.owner.avatar_url,
-                },
-                fields: [
-                    {
-                        name: 'Repo Visiblity',
-                        value: repo.data.visibility.Capitilize(),
-                    },
-                    {
-                        name: 'Stars',
-                        value: `*${repo.data.stargazers_count} stars*`,
-                        inline: true,
-                    },
-                    {
-                        name: 'Open Issues',
-                        value: `*${repo.data.open_issues_count} issues*`,
-                        inline: true,
-                    },
-                    {
-                        name: 'Forks',
-                        value: `*${repo.data.forks_count} forks*`,
-                        inline: true,
-                    },
-                    {
-                        name: 'Topics',
-                        value: `*[${repo.data.topics}]*`,
-                        inline: true,
-                    }
-                ],
-                timestamp: repo.data.pushed_at,
-                footer: {
-                    text: 'Last update to repo',
-                },
-            };
-            await interaction.reply({ embeds: [exampleEmbed] });
-        } else {
-            await interaction.reply(`Could not find ${repoLink}`);
-        }
+        if (!repo || repo.status != 200) return await interaction.reply(`Could not find ${repoLink}`);
+
+        // Create embed
+        const repoEmbed = new MessageEmbed()
+            .setColor(COLOR)
+            .setTitle(repo.data.full_name)
+            .setURL(repoLink)
+            .setDescription(repo.data.description || 'No description')
+            .setThumbnail(repo.data.owner.avatar_url)
+            .setFields([
+                { name: 'Repo Visiblity', value: repo.data.visibility.Capitilize() },
+                { name: 'Stars', value: `*${repo.data.stargazers_count} stars*`, inline: true },
+                { name: 'Open Issues', value: `*${repo.data.open_issues_count} issues*`, inline: true },
+                { name: 'Forks', value: `*${repo.data.forks_count} forks*`, inline: true },
+                { name: 'Topics', value: `*[${repo.data.topics}]*`, inline: true }
+            ])
+            .setTimestamp()
+            .setFooter({ text: 'Last update to repo'})
+
+        await interaction.reply({ embeds: [repoEmbed] });
 	},
 };

@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const fetch = require('node-fetch');
 
+// Fetching options
 const options = {
     method: 'GET',
     headers: {
@@ -15,10 +16,14 @@ module.exports = {
 		.setName('joke')
 		.setDescription('Replies with a random joke.'),
 	async execute(interaction) {
+        // Fetch API
         const resp = await fetch('https://icanhazdadjoke.com/', options);
-        if (resp.ok) {
-            const jsonJoke = await resp.json()
-            await interaction.reply(`**${jsonJoke.joke}**`)
+
+        // Check if we got a response
+        if (!resp.ok) {
+            return await interaction.reply('Could not fetch joke API.')
         }
+        const jsonJoke = await resp.json()
+        await interaction.reply(`**${jsonJoke.joke}**`)
 	},
 };
