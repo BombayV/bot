@@ -7,6 +7,7 @@ exports.Config = {
     "CLIENT_ID": "777055108013752320",
     "GITHUB_AUTH": "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",
     "MONGO_AUTH": 'mongodb+srv://BombayV:evroot@cluster0.s4rp8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+    "JOKE_AUTH": 'HCk7e0KrKN5koQQ7FzZSVg==kLI9u0WQzzFIXa3K',
     "STATUS": "dnd",
     "DESCRIPTION": "for bad memes...",
     "COLOR": '#FE2C54',
