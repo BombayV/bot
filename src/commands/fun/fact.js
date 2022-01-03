@@ -23,9 +23,9 @@ module.exports = {
 
         // Check if we got a response
         if (resp?.statusText !== 'OK') {
-            return await interaction.reply('Could not fetch Fact API.')
+            return await interaction.reply('Could not fetch Fact API.');
         }
-        const jsonFact = await resp.json()
-        await interaction.reply(`**${jsonFact[0].fact}**`)
+        const jsonFact = await resp.json();
+        await interaction.reply(`**${jsonFact[0].fact}**`);
 	},
 };
