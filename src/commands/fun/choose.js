@@ -3,7 +3,7 @@ const BallResponse = require('../../config').Responses;
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('8ball')
+		.setName('choose')
 		.setDescription('Random response to question.')
         .addStringOption(option =>
             option.setName('question')

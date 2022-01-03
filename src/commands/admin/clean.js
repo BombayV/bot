@@ -6,7 +6,7 @@ const TxtCreate = require('../../utils/txtCreate');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('name')
+		.setName('clean')
 		.setDescription('Create a new command.')
         .addNumberOption(option =>
             option.setName('id')
