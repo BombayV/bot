@@ -46,8 +46,8 @@ module.exports = {
         if (banStatus) return await interaction.editReply({ content: `User is already banned.` });
 
         // Check if user is bannable
-        if (!member.bannable) return await interaction.editReply({ content: `<@${member.id}> is not bannable.` })
-        if (!member.moderatable) return await interaction.editReply({ content: `Do not have permissions to timeout <@${member.id}>.`})
+        if (!member.bannable) return await interaction.editReply({ content: `<@${member.id}> is not bannable.` });
+        if (!member.moderatable) return await interaction.editReply({ content: `Do not have permissions to timeout <@${member.id}>.`});
 
         // Data needed for logs and db
         const adminId = interaction.user.id;

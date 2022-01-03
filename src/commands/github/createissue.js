@@ -59,6 +59,7 @@ module.exports = {
 
         if (!title || !body) return await interaction.reply(`No title or body set.`);
 
+        const repoLink = `https://github.com/${userName}/${repoName}`
         const repo = await octokit.request('POST /repos/{owner}/{repo}/issues', {
             owner: userName,
             repo: repoName,
@@ -70,14 +71,13 @@ module.exports = {
         })
 
         if (!repo) return await interaction.reply(`Could not create issue.`);
-        const repoLink = `https://github.com/${userName}/${repoName}/issues/${repo.number}`
 
         // Create embed
         const issueEmbed = new MessageEmbed()
             .setColor(COLOR)
             .setTitle('Issue Created')
-            .setURL(repoLink)
-            .setThumbnail(repo.user.avatar_url)
+            .setURL(repo.data.url)
+            .setThumbnail(repo.data.user.avatar_url)
             .setFields([
                 { name: 'Title', value: title },
                 { name: 'Body', value: `*${body}*`, inline: true }
