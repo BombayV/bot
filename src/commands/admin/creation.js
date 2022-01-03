@@ -14,13 +14,13 @@ module.exports = {
                 .setRequired(true)
         )
         .addStringOption(option =>
-            option.setName('description')
-                .setDescription('Command description')
+            option.setName('title')
+                .setDescription('Title of help guide')
                 .setRequired(true)
         )
         .addStringOption(option =>
-            option.setName('title')
-                .setDescription('Title of help guide')
+            option.setName('description')
+                .setDescription('Command description')
                 .setRequired(true)
         )
         .addStringOption(option =>
@@ -37,7 +37,7 @@ module.exports = {
         // Check for perms
         if (!HasPerms(interaction.member._roles)) return await interaction.reply({ content: 'You do not have permissions for this command!', ephemeral: true });
 
-        // Defer reply so that there's time to ban user.
+        // Defer reply so that there's time to create command.
         await interaction.deferReply( { ephemeral: true} );
 
         const { _, options } = interaction;

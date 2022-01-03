@@ -21,7 +21,7 @@ module.exports = {
         // Check for perms
         if (!HasPerms(interaction.member._roles)) return await interaction.reply({ content: 'You do not have permissions for this command!', ephemeral: true });
 
-        // Defer reply so that there's time to ban user.
+        // Defer reply so that there's time to kick user.
         await interaction.deferReply();
 
         // Check for member input

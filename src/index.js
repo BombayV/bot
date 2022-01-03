@@ -57,7 +57,6 @@ client.on('interactionCreate', async interaction => {
 		console.log(`[ERROR/COMMAND]: ${error}`);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
-
 });
 
 // Login

@@ -18,16 +18,22 @@ module.exports = {
         .addNumberOption(option =>
             option.setName('dices')
                 .setDescription(`Number of dices [${CONSTANTS.dices.min}, ${CONSTANTS.dices.max}].`)
+                .setMinValue(CONSTANTS.dices.min)
+                .setMaxValue(CONSTANTS.dices.max)
                 .setRequired(false)
         )
         .addNumberOption(option =>
             option.setName('min')
                 .setDescription(`Minimum dots on dice [${CONSTANTS.min}, ${CONSTANTS.max}].`)
+                .setMinValue(CONSTANTS.min)
+                .setMaxValue(CONSTANTS.max)
                 .setRequired(false)
         )
         .addNumberOption(option =>
             option.setName('max')
                 .setDescription(`Maximum dots on dice [${CONSTANTS.min}, ${CONSTANTS.max}].`)
+                .setMinValue(CONSTANTS.min)
+                .setMaxValue(CONSTANTS.max)
                 .setRequired(false)
         ),
 	async execute(interaction) {

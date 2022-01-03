@@ -1,7 +1,0 @@
-#title ev-hud
-#description Status not working
-#url :(
-If your status is not working, you can do the following.
-1) Make sure you have not changed the name.
-2) Make sure you're using the latest status (ex: esx_status legacy). VRP only works >= 2.0.
-3) You have set the config to true on both lua and js.
