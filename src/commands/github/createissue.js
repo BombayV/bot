@@ -2,8 +2,10 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const { Octokit } = require('octokit');
 
-const { GITHUB_AUTH, COLOR } = require('../../config').Config;
+const { GITHUB_AUTH } = require('../../config').Config;
 const { Capitilize } = require('../../utils/variedUtils');
+const { COLOR } = require('../../config').Config;
+const HasPerms = require('../../utils/permissions');
 
 // Register authentication
 const octokit = new Octokit({
@@ -12,8 +14,8 @@ const octokit = new Octokit({
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('getrepo')
-		.setDescription('Gets a repo based on parameters')
+		.setName('createissue')
+		.setDescription('Creates a new issue based on parameters')
         .addStringOption(option =>
             option.setName('user')
                 .setDescription('Username of user/organization.')
@@ -23,8 +25,20 @@ module.exports = {
             option.setName('repo')
                 .setDescription('Repository name.')
                 .setRequired(true)
+        )
+        .addStringOption(option =>
+            option.setName('title')
+                .setDescription('Issue title.')
+                .setRequired(true)
+        )
+        .addStringOption(option =>
+            option.setName('body')
+                .setDescription('Issue body description.')
+                .setRequired(true)
         ),
 	async execute(interaction) {
+        if (!HasPerms(interaction.member._roles)) return await interaction.reply({ content: 'You do not have permissions for this command!', ephemeral: true });
+
         // Check for auth with github
         const userAuth = await octokit.rest.users.getAuthenticated()
         .catch((err) => {
@@ -40,35 +54,37 @@ module.exports = {
 
         if (!userName || !repoName) return await interaction.reply(`No user or repo set.`);
 
-        const repoLink = `https://github.com/${userName}/${repoName}`
+        const title = `[Discord] ${options.getString('title', true)}`;
+        const body = options.getString('body', true)?.Capitilize();
 
-        const repo = await octokit.request('GET /repos/{owner}/{repo}', {
+        if (!title || !body) return await interaction.reply(`No title or body set.`);
+
+        const repo = await octokit.request('POST /repos/{owner}/{repo}/issues', {
             owner: userName,
-            repo: repoName
+            repo: repoName,
+            title: title,
+            body: body
         }).catch((err) => {
             console.log(`[ERROR/GITHUB]: Could not find repo named ${repoLink}. Read below.\n` + err)
             return;
         })
 
-        if (!repo || repo.status != 200) return await interaction.reply(`Could not find ${repoLink}`);
+        if (!repo) return await interaction.reply(`Could not create issue.`);
+        const repoLink = `https://github.com/${userName}/${repoName}/issues/${repo.number}`
 
         // Create embed
-        const repoEmbed = new MessageEmbed()
+        const issueEmbed = new MessageEmbed()
             .setColor(COLOR)
-            .setTitle(repo.data.full_name)
+            .setTitle('Issue Created')
             .setURL(repoLink)
-            .setDescription(repo.data.description || 'No description')
-            .setThumbnail(repo.data.owner.avatar_url)
+            .setThumbnail(repo.user.avatar_url)
             .setFields([
-                { name: 'Repo Visiblity', value: repo.data.visibility.Capitilize() },
-                { name: 'Stars', value: `*${repo.data.stargazers_count} stars*`, inline: true },
-                { name: 'Open Issues', value: `*${repo.data.open_issues_count} issues*`, inline: true },
-                { name: 'Forks', value: `*${repo.data.forks_count} forks*`, inline: true },
-                { name: 'Topics', value: `*[${repo.data.topics}]*`, inline: true }
+                { name: 'Title', value: title },
+                { name: 'Body', value: `*${body}*`, inline: true }
             ])
             .setTimestamp()
-            .setFooter({ text: 'Last update to repo'})
+            .setFooter({ text: 'Creation date'})
 
-        await interaction.reply({ embeds: [repoEmbed] });
+        await interaction.reply({embeds: [issueEmbed]});
 	},
 };

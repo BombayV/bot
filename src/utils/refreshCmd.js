@@ -17,11 +17,13 @@ for (const cmd of commandsData) {
     if (cmd.data) {
         commands.push(cmd.data.toJSON());
     } else {
-        const path = cmd.slice(1, cmd.length)
-        const rawFile = fs.readFileSync(`src/${path}`, 'utf8');
-        const txtCmd = TxtCreate(rawFile, path);
-        if (txtCmd.data) {
-            commands.push(txtCmd.data.toJSON());
+        if (typeof cmd !== 'object') {
+            const path = cmd.slice(1, cmd.length)
+            const rawFile = fs.readFileSync(`src/${path}`, 'utf8');
+            const txtCmd = TxtCreate(rawFile, path);
+            if (txtCmd.data) {
+                commands.push(txtCmd.data.toJSON());
+            }
         }
     }
 }

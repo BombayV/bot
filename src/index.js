@@ -18,11 +18,13 @@ for (const cmd of commands) {
     if (cmd.data) {
         client.commands.set(cmd.data.name, cmd);
     } else {
-        const path = cmd.slice(1, cmd.length)
-        const rawFile = fs.readFileSync(`src/${path}`, 'utf8');
-        const txtCmd = TxtCreate(rawFile, path);
-        if (txtCmd.data) {
-            client.commands.set(txtCmd.data.name, txtCmd);
+        if (typeof cmd !== 'object') {
+            const path = cmd?.slice(1, cmd.length)
+            const rawFile = fs.readFileSync(`src/${path}`, 'utf8');
+            const txtCmd = TxtCreate(rawFile, path);
+            if (txtCmd.data) {
+                client.commands.set(txtCmd.data.name, txtCmd);
+            }
         }
     }
 }
