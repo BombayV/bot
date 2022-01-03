@@ -17,8 +17,8 @@ exports.Config = {
  * Roles allowed to do admin commands
 */
 exports.WhitelistRoles = [
-    814305316085694495,
-    847906880868450324
+    847906880868450324,
+    899760864725458944
 ]
 
 /**
