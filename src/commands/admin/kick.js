@@ -38,22 +38,22 @@ module.exports = {
 
             // Timeout embed
             const timeoutEmbed = new MessageEmbed()
-            .setColor(COLOR)
-            .setTitle('User Kicked')
-            .setThumbnail(
-                member.user.displayAvatarURL({
-                    format: 'png',
-                    dynamic: true,
-                    size: 96
-                })
-            )
-            .addFields(
-                { name: 'Username', value: `<@${member.id}>`, inline: true },
-                { name: 'User Id', value: member.id, inline: true },
-                { name: 'Staff Name', value: `<@${adminId}>`, inline: false },
-                { name: 'Reason', value: reason, inline: false }
-            )
-            .setTimestamp();
+                .setColor(COLOR)
+                .setTitle('User Kicked')
+                .setThumbnail(
+                    member.user.displayAvatarURL({
+                        format: 'png',
+                        dynamic: true,
+                        size: 96
+                    })
+                )
+                .addFields(
+                    { name: 'Username', value: `<@${member.id}>`, inline: true },
+                    { name: 'User Id', value: member.id, inline: true },
+                    { name: 'Staff Name', value: `<@${adminId}>`, inline: false },
+                    { name: 'Reason', value: reason, inline: false }
+                )
+                .setTimestamp();
 
             // Ban member with delete days
             member.kick(reason);

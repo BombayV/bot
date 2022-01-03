@@ -2,19 +2,28 @@ const Config = require('./config.js').Config;
 const Statuses = require('./config.js').Statuses;
 const GetFiles = require('./utils/getFiles.js');
 const Cron = require('./utils/cron');
+const TxtCreate = require('./utils/txtCreate.js');
 const { CreateConnection } = require('./db/connection');
 
 const { Client, Intents, Collection } = require('discord.js');
+const fs = require('fs');
 
 // Client start
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_BANS, Intents.FLAGS.GUILD_MEMBERS] });
 client.commands = new Collection();
 
 // Add commands to collection
-const commands = GetFiles('./src/commands/', '.js');
+const commands = GetFiles('./src/commands/');
 for (const cmd of commands) {
     if (cmd.data) {
         client.commands.set(cmd.data.name, cmd);
+    } else {
+        const path = cmd.slice(1, cmd.length)
+        const rawFile = fs.readFileSync(`src/${path}`, 'utf8');
+        const txtCmd = TxtCreate(rawFile, path);
+        if (txtCmd.data) {
+            client.commands.set(txtCmd.data.name, txtCmd);
+        }
     }
 }
 

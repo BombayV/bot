@@ -6,8 +6,7 @@ const fs = require('fs');
  * @param { String } suffix - Example: .js/.ts
  * @returns { Array } - Array with all the command data
  */
-const GetFiles = (dir, suffix) => {
-    const fileSuffix = suffix || '.js'
+const GetFiles = (dir) => {
     const files = fs.readdirSync(dir, {
         withFileTypes: true
     });
@@ -17,11 +16,15 @@ const GetFiles = (dir, suffix) => {
         if (file.isDirectory()) {
             commandData = [
                 ...commandData,
-                ...GetFiles(`${dir}${file.name}/`, fileSuffix)
+                ...GetFiles(`${dir}${file.name}/`)
             ]
-        } else if (file.name.endsWith(fileSuffix)) {
-            const cmd = require(`../commands/${dir.split('commands/')[1]}${file.name}`);
-            commandData.push(cmd);
+        } else {
+            if (file.name.endsWith('.txt')) {
+                commandData.push(`../commands/${dir.split('commands/')[1]}${file.name}`);
+            } else {
+                const cmd = require(`../commands/${dir.split('commands/')[1]}${file.name}`);
+                commandData.push(cmd);
+            }
         }
     }
     return commandData;

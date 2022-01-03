@@ -1,0 +1,4 @@
+#title Export *isPhoneVisible*
+#description I get this error: no such export isPhoneVisible
+#url https://github.com/project-error/npwd/blob/ae11040bb00945f82fe1270c95d28a9764178970/resources/client/cl_main.ts#L29
+You downloaded the source code and didn’t build. 🙂\n Please download from the release tab here: https://github.com/project-error/npwd/releases and be sure you download the npwd.zip as this is the built version.\nIf you want to modify the source code please see the documentation for building here: https://projecterror.dev/docs/npwd/dev/dev_bootstrap/
