@@ -36,8 +36,8 @@ module.exports = {
             const adminId = interaction.user.id;
             const reason = options.getString('reason') || 'No reason specified.';
 
-            // Timeout embed
-            const timeoutEmbed = new MessageEmbed()
+            // Kick embed
+            const kickEmbed = new MessageEmbed()
                 .setColor(COLOR)
                 .setTitle('User Kicked')
                 .setThumbnail(
@@ -55,9 +55,9 @@ module.exports = {
                 )
                 .setTimestamp();
 
-            // Ban member with delete days
+            // Kick member
             member.kick(reason);
-            return await interaction.editReply({ embeds: [timeoutEmbed] })
+            return await interaction.editReply({ embeds: [kickEmbed] })
         } catch (err) {
             console.log(err)
             return await interaction.editReply({ content: `<@${member.id}> could not be kicked.` })

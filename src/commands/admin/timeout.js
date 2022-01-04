@@ -73,7 +73,7 @@ module.exports = {
         try {
             const adminId = interaction.user.id;
             const reason = options.getString('reason') || 'No reason specified.';
-            // Timeout embde
+            // Timeout embed
             const timeoutEmbed = new MessageEmbed()
             .setColor(COLOR)
             .setTitle('User Timed Out')
@@ -93,7 +93,7 @@ module.exports = {
             )
             .setTimestamp();
 
-            // Ban member with delete days
+            // Timeout member
             member.timeout(duration, reason);
             return await interaction.editReply({ embeds: [timeoutEmbed] })
         } catch (err) {
