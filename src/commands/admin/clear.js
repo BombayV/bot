@@ -61,7 +61,6 @@ module.exports = {
         if (!id && member || !id && count)
         (await allMessages).filter((msg) => {
             if (count <= i) return;
-            console.log(member.id, msg.author.id)
             if (member && member.id == msg.author.id) {
                 i++;
                 filtered.push(msg);
