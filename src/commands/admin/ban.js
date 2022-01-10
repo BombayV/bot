@@ -117,11 +117,7 @@ module.exports = {
 
             // Add user to ban db
             const banned = await NewBan(interaction.guild.id, member.id, adminId, reason, perma, expires).catch((err) => console.log(err));
-            if (banned) {
-                return await interaction.editReply({ embeds: [banEmbed] })
-            } else {
-                return await interaction.editReply({ content: `<@${member.id}> user was already banned.` })
-            }
+            return await (banned ? interaction.editReply({ embeds: [banEmbed] }) : interaction.editReply({ content: `<@${member.id}> user was already banned.` }));
         } catch (err) {
             return await interaction.editReply({ content: `<@${member.id}> could not be banned.` })
         }
